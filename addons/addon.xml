@@ -1,14 +1,18 @@
-<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="repository.rvlad" name="RVlad Kodi Add-ons" version="1.0.0" provider-name="Rudnickii_V_L">
-	<extension point="xbmc.addon.repository" name="RVlad Kodi Add-ons">
-		<info compressed="false">http://rvlad-kodi-addons-repo.googlecode.com/svn/trunk/addons/addons.xml</info>
-		<checksum>http://rvlad-kodi-addons-repo.googlecode.com/svn/trunk/addons/addons.xml.md5</checksum>
-		<datadir zip="false">http://rvlad-kodi-addons-repo.googlecode.com/svn/trunk/addons/</datadir>
+<?xml version="1.0" encoding="UTF-8"?>
+<addons>
+<addon id="plugin.video.kaztube" version="0.0.3" name="KazTube" provider-name="Rudnickii_V_L">
+	<requires>
+		<import addon="xbmc.python" version="2.7.0"/>
+	</requires>
+	<extension point="xbmc.python.pluginsource" library="default.py">
+		<provides>video</provides>
 	</extension>
-	<extension point="xbmc.addon.metadata">
-		<summary>Install Add-ons from rvlad Add-on Repository</summary>
-		<description>Plug-ins for Kodi(XBMC)</description>
-		<disclaimer>There are add-ons that allow viewing popular Kazahstan resources in the program Kodi(XBMC)</disclaimer>
-		<platform>all</platform>
+	<extension point="xbmc.addon.metadata"> 
+		<summary lang="en">KazTube Video</summary>
+		<summary lang="ru">Видео KazTube</summary>
+		<description lang="en">Addon for watching KazTube video from XBMC.</description>
+		<description lang="ru">Дополнение для просмотра видео KazTube из XBMC.</description>
+		<platform>all</platform> 
 	</extension>
 </addon>
+</addons>
