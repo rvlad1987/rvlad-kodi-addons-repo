@@ -1,0 +1,25 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<!-- Основная информация -->
+<addon id="plugin.video.kaztube"
+version="0.0.3"
+name="KazTube"
+provider-name="Rudnickii_V_L">
+<!-- Зависимости -->
+<requires>
+  <import addon="xbmc.python" version="2.7.0"/>
+</requires>
+<!-- Тип (назначение) плагина -->
+<extension point="xbmc.python.pluginsource" library="default.py">
+  <provides>video</provides>
+</extension>
+<!-- Описание -->
+<extension point="xbmc.addon.metadata"> 
+  <summary lang="en">KazTube Video</summary>
+  <summary lang="ru">Видео KazTube</summary>
+  <summary lang="uk">Відео KazTube</summary>
+  <description lang="en">Addon for watching KazTube video from XBMC.</description>
+  <description lang="ru">Дополнение для просмотра видео KazTube из XBMC.</description>
+  <description lang="uk">Надбудова для прегляду відео KazTube з XBMC.</description>
+  <platform>all</platform> 
+</extension>
+</addon>
