@@ -1,4 +1,4 @@
- <?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <addon id="plugin.video.kaztube" version="0.0.4" name="KazTube" provider-name="Rudnickii_V_L">
 	<requires>
 		<import addon="xbmc.python" version="2.7.0"/>
