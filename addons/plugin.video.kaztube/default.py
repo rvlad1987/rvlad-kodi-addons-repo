@@ -34,7 +34,6 @@ def Categories():
 	if html:
 		addDir('[B]Поиск[/B]','',40,'',True, 0)
 		addDir('[B]Рекомендуемое[/B]',url+'/',20,'',True, 0)		
-		addDir('[B]Топ[/B]',url + '/video/popular/', 20, '', True, 0)				
 		addDir('[B]Новое[/B]',url + '/video/', 20, '', True, 0)				
 
 		category_video = re.compile('<li><a href="http://kaztube.kz/' + _addon_lang + '/video\?category_id=(.+?)">(.+?)</a></li>').findall(html)
