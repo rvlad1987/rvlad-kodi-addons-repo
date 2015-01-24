@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<settings>
-  <category label="128">
-    <setting id="language" type="labelenum" label="100500" values="ru|kz" default="ru" />
-	<setting id="list-view" type="bool" label="100503" default="False" />
-  </category>
-</settings>
