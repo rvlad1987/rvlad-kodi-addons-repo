@@ -15,19 +15,20 @@
 		<platform>all</platform> 
 	</extension>
 </addon>
-<addon id="plugin.video.kset" version="0.0.1" name="kset" provider-name="Rudnickii_V_L">
+<addon id="plugin.video.kset" version="0.0.5" name="kset" provider-name="Rudnickii_V_L">
 	<requires>
-		<import addon="xbmc.python" version="2.7.0"/>
+		<import addon="xbmc.python" version="2.7.8"/>
 	</requires>
-	<extension point="xbmc.python.pluginsource" library="addon.py">
+	<extension point="xbmc.python.pluginsource" provides="video" library="addon.py">
 		<provides>video</provides>
 	</extension>
-	<extension point="xbmc.addon.metadata"> 
-		<summary lang="en">Kset Video</summary>
-		<summary lang="ru">Видео Kset</summary>
-		<description lang="en">Addon for watching Kset video from XBMC.</description>
-		<description lang="ru">Дополнение для просмотра видео Kset из XBMC.</description>
-		<platform>all</platform> 
+	<extension point="xbmc.addon.metadata">
+		<summary>Plugin for kset.kz</summary>
+        <description>Просмотр видео с сайта kset.kz</description>
+		<disclaimer></disclaimer>
+		<language></language>
+		<platform>all</platform>
+		<license>GNU GENERAL PUBLIC LICENSE. Version 2, June 1991</license>
 	</extension>
 </addon>
 </addons>
