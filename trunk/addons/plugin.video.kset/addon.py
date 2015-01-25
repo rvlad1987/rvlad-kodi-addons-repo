@@ -55,12 +55,14 @@ def _string(string_id):
 def Categories():
 	global _find_mode
 	
-	url = 'http://kset.kz/cinema/'
+	url = 'http://kset.kz/'
 	
 	_find_mode = 'movie'
-	addDir('[B]Фильмы[/B]',url + '?search_string=&type=movie&genre=', 20, '', True, '0')
+	addDir('[B]Фильмы[/B]',url + 'cinema/?search_string=&type=movie&genre=', 20, '', True, '0')
 	_find_mode = 'series'
-	addDir('[B]Сериалы[/B]',url + '?search_string=&type=series&genre=', 20, '', True, '0')				
+	addDir('[B]Сериалы[/B]',url + 'cinema/?search_string=&type=series&genre=', 20, '', True, '0')
+	_find_mode = 'video'
+	addDir('[B]Видео[/B]',url + 'video/top/all', 20, '', True, '0')	
 
 # mode == 20 
 def Movies(url):
@@ -68,7 +70,18 @@ def Movies(url):
 	
 	html = getVideo(url)
 
-	movie_links = re.compile('<a class="cinema-poster fl_l bcFF pad6 sh1302 br5 us_none a navi" href="(.+?)">\s+<img class="fl_l br4" src="(.+?)" alt="(.+?)">').findall(html)
+	if _find_mode == 'video':
+		movie_links = []
+		i = 0
+		
+		thumb_links = re.compile('"  src="(.+?)" />').findall(html)
+		title_links = re.compile('<a title="(.+?)" class="spr_b ptl db vid navi" href="(.+?)"></a>').findall(html)
+
+		for t, l in title_links:
+			movie_links.append( (l, thumb_links[i], t ) )
+			i = i + 1
+	else:
+		movie_links = re.compile('<a class="cinema-poster fl_l bcFF pad6 sh1302 br5 us_none a navi" href="(.+?)">\s+<img class="fl_l br4" src="(.+?)" alt="(.+?)">').findall(html)
 	
 	is_cat = False
 	
@@ -79,7 +92,8 @@ def Movies(url):
 		is_cat = False
 		_find_mode = 'movie'
 		
-	addDir('[B]Поиск[/B]','',40,'',True, '0')
+	if _find_mode != 'video':
+		addDir('[B]Поиск[/B]','',40,'',True, '0')
 	
 	item = xbmcgui.ListItem('[B]Категории[/B]', iconImage='DefaultFolder.png', thumbnailImage='')
 	xbmcplugin.addDirectoryItem(_addon_id, 'plugin://plugin.video.kset/' , item, True)	
@@ -98,20 +112,32 @@ def Videos(url, title, png, is_seria):
 		item.setInfo( type='Video', infoLabels={'Title': title} )		
 		xbmc.Player().play(url, item)		
 	else:
-		config = get_config(url)
+		print _find_mode
+		if _find_mode == 'video':
+			config = get_config(url, 1)		
+		else:
+			config = get_config(url)
+			
+		print config
 		
-		if config['type'] == 'series':
+		if _find_mode == 'series':
 			for vid in config['videos']:
 				if vid['episode'] == '':
 					ep_index = '1'
 				else:
-					ep_index = vid['episode']
-				ep_index = 'Episode ' + ep_index
-				addDir(ep_index, vid['file'], 50, vid['poster'], False, _url_page)
+					ep_index = vid['episode'].encode('ascii')
+
+				addDir('Эпизод ' + ep_index + ' [I]' + vid['quality'].encode('ascii') + '[/I]', vid['file'], 50, vid['poster'], False, _url_page)
 		else:
+			
+			if _find_mode == 'video':
+				url_link = config['file']
+			else:
+				url_link = config['videos'][0]['file']
+			
 			item = xbmcgui.ListItem(title, iconImage='DefaultVideo.png', thumbnailImage=png)
 			item.setInfo( type='Video', infoLabels={'Title': title} )
-			xbmc.Player().play(config['videos'][0]['file'], item)
+			xbmc.Player().play( url_link, item)
  
 
 def get_params():
@@ -156,7 +182,7 @@ def addDir(title, url, mode, png, is_cat, page):
 	
 	item = xbmcgui.ListItem(title, iconImage='DefaultFolder.png', thumbnailImage=spng)
 	item.setInfo( type='Video', infoLabels={'Title': title} )
-
+	
 	xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]), url=sys_url, listitem=item, isFolder=is_cat)
 
 # Переключаемся на нужный вид в зависимости от текущего скина.
