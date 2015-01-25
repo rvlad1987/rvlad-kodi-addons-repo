@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.video.kset" version="0.0.5" name="kset" provider-name="Rudnickii_V_L">
+<addon id="plugin.video.kset" version="0.0.6" name="kset" provider-name="Rudnickii_V_L">
 	<requires>
 		<import addon="xbmc.python" version="2.7.8"/>
 	</requires>
