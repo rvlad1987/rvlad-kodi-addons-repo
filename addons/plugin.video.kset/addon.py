@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 import urllib, urllib2, re, sys, socket, os
-import xbmc, xbmcplugin, xbmcgui, xbmcaddon
+import xbmc, xbmcplugin, xbmcgui, xbmcaddon, xbmcvfs
 
 # Определяем параметры плагина
 _ADDON_NAME =   'plugin.video.kset'
@@ -14,9 +14,11 @@ _addon_lang = _addon.getSetting('language')
 _addon_result_thumbs = _addon.getSetting('list-view')
 _url_page = '0'
 _url = 'http://kset.kz'
-_find_mode = 'cinema'
+_find_mode = ''
 #scroll_last_object  10     
-_scroll_last_offset = '0' 
+_scroll_last_offset = '0'
+_type = ''
+_genre = ''
 
 from kset_config import get_config
 
@@ -48,33 +50,32 @@ def getHTML(url):
 # Вспомогательная функция для отображения строк интерфейса
 def _string(string_id):
 	return _addon.getLocalizedString(string_id).encode('utf-8')
-	
+
+# mode == Null
 def Categories():
-	url = 'http://kset.kz/cinema/'
-	html = getHTML(url)
-	if html:
+	global _find_mode
 	
-		addDir('[B]Фильмы[/B]',url + '?search_string=&type=movie&genre=', 20, '', True, '0')
-		addDir('[B]Сериалы[/B]',url + '?search_string=&type=series&genre=', 20, '', True, '0')				
-"""
-		category_video = re.compile('<li><a href="http://kaztube.kz/' + _addon_lang + '/video\?category_id=(.+?)">(.+?)</a></li>').findall(html)
-		
-		for link, title in category_video:
-			addDir(title, url + '/video?category_id=' + link, 20,'', True, 0)
+	url = 'http://kset.kz/cinema/'
+	
+	_find_mode = 'movie'
+	addDir('[B]Фильмы[/B]',url + '?search_string=&type=movie&genre=', 20, '', True, '0')
+	_find_mode = 'series'
+	addDir('[B]Сериалы[/B]',url + '?search_string=&type=series&genre=', 20, '', True, '0')				
 
-#	item = xbmcgui.ListItem('[B]Выход[/B]', iconImage='DefaultFolder.png', thumbnailImage='')
-#	xbmcplugin.addDirectoryItem(_addon_id, 'plugin://' , item, True)	
-"""
-
+# mode == 20 
 def Movies(url):
+	global _find_mode
+	
 	html = getVideo(url)
 
 	movie_links = re.compile('<a class="cinema-poster fl_l bcFF pad6 sh1302 br5 us_none a navi" href="(.+?)">\s+<img class="fl_l br4" src="(.+?)" alt="(.+?)">').findall(html)
 	
+	is_cat = False
+	
 	if 'type=series' in url:
 		is_cat = True
 		_find_mode = 'series'
-	else:
+	elif 'type=movie' in url:
 		is_cat = False
 		_find_mode = 'movie'
 		
@@ -87,11 +88,10 @@ def Movies(url):
 		addDir(title, _url + link, 30, png, is_cat, _url_page)
 	
 	
-	addDir('[COLOR F5DEB300]Загрузить еще[/COLOR]', url, 20, '', True, str( int(_url_page) + 10 ))
+	if 'paginateLastOffset = 0' not in html:
+		addDir('[COLOR F5DEB300]Загрузить еще[/COLOR]', url, 20, '', True, str( int(_url_page) + 10 ))
 
 def Videos(url, title, png, is_seria):
-	#html = getHTML(url)
-
 	if is_seria == True:
 		
 		item = xbmcgui.ListItem(title, iconImage='DefaultVideo.png', thumbnailImage=png)
@@ -99,7 +99,7 @@ def Videos(url, title, png, is_seria):
 		xbmc.Player().play(url, item)		
 	else:
 		config = get_config(url)
-
+		
 		if config['type'] == 'series':
 			for vid in config['videos']:
 				if vid['episode'] == '':
@@ -152,10 +152,11 @@ def addDir(title, url, mode, png, is_cat, page):
 		spng = ''
 	
 	sys_url = sys_url + '&page=' + urllib.quote_plus(page)
-	sys_url = sys_url + '&type=' + urllib.quote_plus(_url_page)	
+	sys_url = sys_url + '&type=' + urllib.quote_plus(_find_mode)	
+	
 	item = xbmcgui.ListItem(title, iconImage='DefaultFolder.png', thumbnailImage=spng)
 	item.setInfo( type='Video', infoLabels={'Title': title} )
-	
+
 	xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]), url=sys_url, listitem=item, isFolder=is_cat)
 
 # Переключаемся на нужный вид в зависимости от текущего скина.
@@ -180,6 +181,7 @@ title  = None
 mode   = None
 png	   = None
 
+
 try:    title = urllib.unquote_plus(params['title'])
 except: pass
 
@@ -195,7 +197,7 @@ except: pass
 try:    _url_page = params['page']
 except: pass
 
-try:    _find_mode = params['type']
+try:    _find_mode = urllib.unquote_plus(params['type'])
 except: pass
 
 if mode == None:
