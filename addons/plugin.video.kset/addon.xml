@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.video.kset" version="0.0.6" name="kset" provider-name="Rudnickii_V_L">
+<addon id="plugin.video.kset" version="0.0.7" name="k[COLOR red]set[/COLOR]" provider-name="Rudnickii_V_L">
 	<requires>
 		<import addon="xbmc.python" version="2.7.8"/>
 	</requires>
-	<extension point="xbmc.python.pluginsource" provides="video" library="addon.py">
-		<provides>video</provides>
+	<extension point="xbmc.python.pluginsource" provides="video, audio" library="addon.py">
+		<provides>video audio</provides>
 	</extension>
 	<extension point="xbmc.addon.metadata">
 		<summary>Plugin for kset.kz</summary>
